@@ -1,4 +1,4 @@
-defmodule IslandsEngine do
+defmodule IE do
   def hello do
     :world
   end

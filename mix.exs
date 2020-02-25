@@ -1,4 +1,4 @@
-defmodule IslandsEngine.MixProject do
+defmodule IE.MixProject do
   use Mix.Project
 
   def project do
@@ -15,7 +15,7 @@ defmodule IslandsEngine.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {IslandsEngine.Application, []}
+      mod: {IE.Application, []}
     ]
   end
 
