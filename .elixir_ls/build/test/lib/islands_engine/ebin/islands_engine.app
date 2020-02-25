@@ -1,9 +1,8 @@
 {application,islands_engine,
              [{applications,[kernel,stdlib,elixir,logger]},
               {description,"islands_engine"},
-              {modules,['Elixir.IE',
-                        'Elixir.IE.Application',
-                        'Elixir.IE.Coordinate']},
+              {modules,['Elixir.IE','Elixir.IE.Application',
+                        'Elixir.IE.Coordinate','Elixir.IE.Guesses']},
               {registered,[]},
               {vsn,"0.1.0"},
               {mod,{'Elixir.IE.Application',[]}}]}.
