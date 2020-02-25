@@ -1,3 +1,5 @@
+![Tests](https://github.com/moritzploss/islands/workflows/Tests/badge.svg)
+
 # Islands Engine
 
 Building a simple web app with `Elixir` and `Phoenix`.
