@@ -29,4 +29,19 @@ defmodule IE.IslandsTest do
     assert IE.Island.overlaps?(island1, island2)
     assert not IE.Island.overlaps?(island1, island3)
   end
+
+  test "correctly identify hits" do
+    {:ok, coordinate} = IE.Coordinate.new(4, 6)
+    {:ok, island} = IE.Island.new(:l_shape, coordinate)
+
+    {:hit, _} = IE.Island.guess(island, coordinate)
+  end
+
+  test "correctly identify misses" do
+    {:ok, coordinate1} = IE.Coordinate.new(4, 6)
+    {:ok, island} = IE.Island.new(:l_shape, coordinate1)
+    {:ok, coordinate2} = IE.Coordinate.new(1, 1)
+
+    :miss = IE.Island.guess(island, coordinate2)
+  end
 end
