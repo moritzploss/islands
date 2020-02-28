@@ -15,4 +15,18 @@ defmodule IE.IslandsTest do
     {:ok, coordinate} = IE.Coordinate.new(10, 10)
     {:error, _} = IE.Island.new(:l_shape, coordinate)
   end
+
+  test "correctly identify overlapping islands" do
+    {:ok, coordinate1} = IE.Coordinate.new(4, 6)
+    {:ok, island1} = IE.Island.new(:l_shape, coordinate1)
+
+    {:ok, coordinate2} = IE.Coordinate.new(4, 6)
+    {:ok, island2} = IE.Island.new(:dot, coordinate2)
+
+    {:ok, coordinate3} = IE.Coordinate.new(1, 1)
+    {:ok, island3} = IE.Island.new(:dot, coordinate3)
+
+    assert IE.Island.overlaps?(island1, island2)
+    assert not IE.Island.overlaps?(island1, island3)
+  end
 end

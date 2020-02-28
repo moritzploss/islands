@@ -14,6 +14,16 @@ defmodule IE.Island do
 
   defp offsets(_), do: {:error, :invalid_island_type}
 
+  def new(type, %IE.Coordinate{} = upper_left) do
+    with [_|_] = offsets <- offsets(type),
+      %MapSet{} = coordinates <- add_coordinates(offsets, upper_left)
+    do
+      {:ok, %IE.Island{coordinates: coordinates, hit_coordinates: MapSet.new()}}
+    else
+      error -> error
+    end
+  end
+
   defp add_coordinate(coordinates, %IE.Coordinate{row: row, col: col},
     {row_offset, col_offset}) do
       case IE.Coordinate.new(row + row_offset, col + col_offset) do
@@ -30,13 +40,9 @@ defmodule IE.Island do
     )
   end
 
-  def new(type, %IE.Coordinate{} = upper_left) do
-    with [_|_] = offsets <- offsets(type),
-      %MapSet{} = coordinates <- add_coordinates(offsets, upper_left)
-    do
-      {:ok, %IE.Island{coordinates: coordinates, hit_coordinates: MapSet.new()}}
-    else
-      error -> error
-    end
+  def overlaps?(existing_island, new_island) do
+    not MapSet.disjoint?(existing_island.coordinates, new_island.coordinates)
   end
+
+
 end
