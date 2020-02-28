@@ -53,4 +53,8 @@ defmodule IE.Island do
     end
   end
 
+  def forested?(%IE.Island{} = island) do
+    MapSet.equal?(island.coordinates, island.hit_coordinates)
+  end
+
 end
