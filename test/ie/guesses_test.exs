@@ -1,12 +1,14 @@
 defmodule IE.GuessesTest do
   use ExUnit.Case, async: true
 
+  alias IE.Guesses
+
   test "guesses should include hits and misses" do
-    %IE.Guesses{hits: _hits, misses: _misses} = IE.Guesses.new()
+    %Guesses{hits: _hits, misses: _misses} = Guesses.new()
   end
 
   test "hits should behave like sets" do
-    guesses_0 = IE.Guesses.new()
+    guesses_0 = Guesses.new()
     {:ok, coordinate_1} = IE.Coordinate.new(1, 1)
     {:ok, coordinate_2} = IE.Coordinate.new(2, 2)
 
@@ -21,20 +23,19 @@ defmodule IE.GuessesTest do
   end
 
   test "the add function should accept hits" do
-    guesses = IE.Guesses.new()
+    guesses = Guesses.new()
     {:ok, hit_coordinate1} = IE.Coordinate.new(1, 2)
 
-    guesses_with_hit = IE.Guesses.add(guesses, :hit, hit_coordinate1)
+    guesses_with_hit = Guesses.add(guesses, :hit, hit_coordinate1)
     assert MapSet.member?(guesses_with_hit.hits, hit_coordinate1)
     assert not MapSet.member?(guesses_with_hit.misses, hit_coordinate1)
   end
 
-
   test "the add function should accept misses" do
-    guesses = IE.Guesses.new()
+    guesses = Guesses.new()
     {:ok, miss_coordinate1} = IE.Coordinate.new(1, 2)
 
-    guesses_with_misses = IE.Guesses.add(guesses, :miss, miss_coordinate1)
+    guesses_with_misses = Guesses.add(guesses, :miss, miss_coordinate1)
     assert MapSet.member?(guesses_with_misses.misses, miss_coordinate1)
     assert not MapSet.member?(guesses_with_misses.hits, miss_coordinate1)
   end
