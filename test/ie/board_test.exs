@@ -44,8 +44,7 @@ defmodule IE.BoardTest do
     board = Enum.reduce(islands, Board.new(),
       fn ({island, type}, board) ->
         Board.position_island(board, type, island)
-      end
-    )
+      end)
 
     assert Board.all_islands_positioned?(board)
   end
