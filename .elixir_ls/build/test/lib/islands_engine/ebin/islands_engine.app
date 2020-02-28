@@ -1,7 +1,7 @@
 {application,islands_engine,
              [{applications,[kernel,stdlib,elixir,logger]},
               {description,"islands_engine"},
-              {modules,['Elixir.IE','Elixir.IE.Application',
+              {modules,['Elixir.IE','Elixir.IE.Application','Elixir.IE.Board',
                         'Elixir.IE.Coordinate','Elixir.IE.Guesses',
                         'Elixir.IE.Island']},
               {registered,[]},

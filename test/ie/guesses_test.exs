@@ -19,4 +19,13 @@ defmodule IE.GuessesTest do
     guesses_3 = update_in(guesses_2.hits, &MapSet.put(&1, coordinate_2))
     assert MapSet.size(guesses_3.hits) == 2
   end
+
+  test "the add function should accept 'hits'" do
+    guesses = IE.Guesses.new()
+    {:ok, hit_coordinate1} = IE.Coordinate.new(1, 2)
+
+    guesses_with_hit = IE.Guesses.add(guesses, :hit, hit_coordinate1)
+    assert MapSet.member?(guesses_with_hit.hits, hit_coordinate1)
+    assert not MapSet.member?(guesses_with_hit.misses, hit_coordinate1)
+  end
 end
