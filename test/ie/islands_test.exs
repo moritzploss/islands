@@ -48,6 +48,9 @@ defmodule IE.IslandsTest do
   test "determine that island is forested" do
     {:ok, upper_left} = IE.Coordinate.new(1, 2)
     {:ok, island} = IE.Island.new(:s_shape, upper_left)
+
+    assert not IE.Island.forested?(island)
+
     forrested_island = Enum.reduce(
       island.coordinates,
       island,

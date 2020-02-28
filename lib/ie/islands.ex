@@ -57,4 +57,5 @@ defmodule IE.Island do
     MapSet.equal?(island.coordinates, island.hit_coordinates)
   end
 
+  def types, do: [:atoll, :dot, :l_shape, :s_shape, :square]
 end
