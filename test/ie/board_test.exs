@@ -46,7 +46,8 @@ defmodule IE.BoardTest do
     board = Enum.reduce(islands, Board.new(),
       fn ({island, type}, board) ->
         Board.position_island(board, type, island)
-      end)
+      end
+    )
 
     assert Board.all_islands_positioned?(board)
   end
@@ -57,7 +58,7 @@ defmodule IE.BoardTest do
     )
     {:ok, guess_coordinate} = IE.Coordinate.new(10, 10)
 
-    {:miss, :none, :no_win, _} = IE.Board.guess(
+    {:miss, :none, :no_win, _} = Board.guess(
       board_with_square, guess_coordinate
     )
   end
@@ -68,7 +69,7 @@ defmodule IE.BoardTest do
     )
     {:ok, guess_coordinate} = IE.Coordinate.new(2, 2)
 
-    {:hit, :none, :no_win, _} = IE.Board.guess(
+    {:hit, :none, :no_win, _} = Board.guess(
       board_with_square, guess_coordinate
     )
   end
@@ -83,7 +84,7 @@ defmodule IE.BoardTest do
 
     {:win, _ } = Enum.reduce(coordinates, board_with_square,
       fn (coordinate, board) ->
-        case IE.Board.guess(board, coordinate) do
+        case Board.guess(board, coordinate) do
           {:hit, :none, :no_win, board} -> board
           {:hit, :square, :win, board} -> {:win, board}
         end
