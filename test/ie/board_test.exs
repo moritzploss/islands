@@ -82,11 +82,11 @@ defmodule IE.BoardTest do
       result_if_ok(&IE.Coordinate.new/2).(position)
     end
 
-    {:win, _ } = Enum.reduce(coordinates, board_with_square,
+    :win = Enum.reduce(coordinates, board_with_square,
       fn (coordinate, board) ->
         case Board.guess(board, coordinate) do
           {:hit, :none, :no_win, board} -> board
-          {:hit, :square, :win, board} -> {:win, board}
+          {:hit, :square, :win, board} -> :win
         end
       end
     )
