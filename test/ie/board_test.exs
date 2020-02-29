@@ -78,15 +78,13 @@ defmodule IE.BoardTest do
     board_with_square = Board.position_island(
       default.board, :square, default.island
     )
-    coordinates = for position <- [{2, 2}, {2, 3}, {3, 2}, {3, 3}] do
-      result_if_ok(&IE.Coordinate.new/2).(position)
-    end
+    coordinates = board_with_square.square.coordinates
 
     :win = Enum.reduce(coordinates, board_with_square,
       fn (coordinate, board) ->
         case Board.guess(board, coordinate) do
           {:hit, :none, :no_win, board} -> board
-          {:hit, :square, :win, board} -> :win
+          {:hit, :square, :win, _} -> :win
         end
       end
     )
