@@ -52,4 +52,22 @@ defmodule IE.RulesTest do
     :error = Rules.check(rules, {:set_islands, :player1})
     :error = Rules.check(rules, {:set_islands, :player2})
   end
+
+  test "after guess of player1, transition to player2_turn" do
+    rules = %Rules{Rules.new() | state: :player1_turn}
+    {:ok, player2_turn} = Rules.check(rules, {:guess_coordinate, :player1})
+    assert player2_turn.state == :player2_turn
+  end
+
+  test "after positive win_check for player1, transition to game_over" do
+    rules = %Rules{Rules.new() | state: :player1_turn}
+    {:ok, game_over} = Rules.check(rules, {:win_check, :win})
+    assert game_over.state == :game_over
+  end
+
+  test "after negative win_check for player1, stay in player1_turn" do
+    rules = %Rules{Rules.new() | state: :player1_turn}
+    {:ok, player1_turn} = Rules.check(rules, {:win_check, :no_win})
+    assert player1_turn.state == :player1_turn
+  end
 end
