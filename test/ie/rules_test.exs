@@ -70,4 +70,27 @@ defmodule IE.RulesTest do
     {:ok, player1_turn} = Rules.check(rules, {:win_check, :no_win})
     assert player1_turn.state == :player1_turn
   end
+
+  test "don't allow guess by player2 when in it's player1's turn" do
+    rules = %Rules{Rules.new() | state: :player1_turn}
+    :error = Rules.check(rules, {:guess_coordinate, :player2})
+  end
+
+  test "after guess of player2, transition to player1_turn" do
+    rules = %Rules{Rules.new() | state: :player2_turn}
+    {:ok, player1_turn} = Rules.check(rules, {:guess_coordinate, :player2})
+    assert player1_turn.state == :player1_turn
+  end
+
+  test "after positive win_check for player2, transition to game_over" do
+    rules = %Rules{Rules.new() | state: :player2_turn}
+    {:ok, game_over} = Rules.check(rules, {:win_check, :win})
+    assert game_over.state == :game_over
+  end
+
+  test "after negative win_check for player2, stay in player2_turn" do
+    rules = %Rules{Rules.new() | state: :player2_turn}
+    {:ok, player1_turn} = Rules.check(rules, {:win_check, :no_win})
+    assert player1_turn.state == :player2_turn
+  end
 end
