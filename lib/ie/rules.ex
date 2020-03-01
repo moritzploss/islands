@@ -8,6 +8,10 @@ defmodule IE.Rules do
 
   def new, do: %Rules{}
 
+  defp both_players_islands_set?(rules) do
+    rules.player1 == :islands_set && rules.player2 == :islands_set
+  end
+
   def check(%Rules{state: :initialized} = rules, :add_player) do
     {:ok, %Rules{rules | state: :players_set}}
   end
@@ -16,6 +20,14 @@ defmodule IE.Rules do
     case Map.fetch!(rules, player) do
       :islands_set -> :error
       :islands_not_set -> {:ok, rules}
+    end
+  end
+
+  def check(%Rules{state: :players_set} = rules, {:set_islands, player}) do
+    new_rules = Map.put(rules, player, :islands_set)
+    case both_players_islands_set?(new_rules) do
+      true -> {:ok, %Rules{new_rules | state: :player1_turn}}
+      false -> {:ok, new_rules}
     end
   end
 
