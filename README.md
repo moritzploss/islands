@@ -7,7 +7,7 @@ This repo contains an implementation of *Islands*, a classic boardgame similar t
 The project was built based on the book
 *Functional Web Development with Elixir, OTP, and Phoenix* by Lance Halvorsen. 
 
-## Run the Backend
+## Backend
 
 ### Getting Started
 
