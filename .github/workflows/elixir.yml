@@ -18,6 +18,3 @@ jobs:
       run: mix deps.get
     - name: Run Tests
       run: mix test --cover
-      with:
-        name: dist
-        path: dist
