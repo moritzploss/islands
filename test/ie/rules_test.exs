@@ -19,11 +19,7 @@ defmodule IE.RulesTest do
   end
 
   test "players can set islands multiple times when in players_set state" do
-    rules = %Rules{
-      state: :players_set,
-      player1: :islands_not_set,
-      player2: :islands_not_set
-    }
+    rules = %Rules{Rules.new() | state: :players_set}
 
     {:ok, player1_set} = Rules.check(rules, {:set_islands, :player1})
     assert player1_set.state == :players_set
@@ -33,11 +29,7 @@ defmodule IE.RulesTest do
   end
 
   test "players shouldn't be able to position islands after setting them" do
-    rules = %Rules{
-      state: :players_set,
-      player1: :islands_not_set,
-      player2: :islands_not_set
-    }
+    rules = %Rules{Rules.new() | state: :players_set}
 
     {:ok, player1_set} = Rules.check(rules, {:set_islands, :player1})
     assert player1_set.state == :players_set
@@ -48,11 +40,7 @@ defmodule IE.RulesTest do
   end
 
   test "state should transition to player1_turn if players have set islands" do
-    rules = %Rules{
-      state: :players_set,
-      player1: :islands_not_set,
-      player2: :islands_not_set
-    }
+    rules = %Rules{Rules.new() | state: :players_set}
 
     {:ok, player1_set} = Rules.check(rules, {:set_islands, :player1})
     assert player1_set.state == :players_set
