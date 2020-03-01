@@ -1,12 +1,17 @@
 ![Tests](https://github.com/moritzploss/islands/workflows/Tests/badge.svg)
 
-# Islands Engine
+# Islands
 
-Building a simple web app with `Elixir` and `Phoenix`.
+This repo contains an implementation of *Islands*, a classic boardgame similar to (but more pacifistic than) *Battleship*.
 
-## Getting started
+The project was built while following the book
+*Functional Web Development with Elixir, OTP, and Phoenix* by Lance Halvorsen. 
 
-Install the dependencies:
+## Run the Backend
+
+### Getting Started
+
+Install the `Elixir` dependencies:
 
     mix deps.get
 
@@ -16,7 +21,7 @@ Compile the project:
 
 Run the tests:
 
-    mix test
+    mix test --cover
 
 Format the code:
 
@@ -26,7 +31,7 @@ Run the linter:
 
     mix credo --strict --all
 
-## Working with `iex`
+### Working with `iex`
 
 Start an `iex` session inside the project:
 
