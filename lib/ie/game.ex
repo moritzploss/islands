@@ -9,7 +9,7 @@ defmodule IE.Game do
 
   @players [:player1, :player2]
 
-  # Client-Side
+  # Public interface
 
   @spec start_link(binary) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(player_name) when is_binary(player_name) do
@@ -22,6 +22,10 @@ defmodule IE.Game do
 
   def position_island(game, player, island_type, row, col) when player in @players do
     GenServer.call(game, {:position_island, player, island_type, row, col})
+  end
+
+  def set_island(game, player) when player in @players do
+    GenServer.call(game, {:set_islands, player})
   end
 
   # GenServer Helper
@@ -78,6 +82,20 @@ defmodule IE.Game do
     else
       :error -> {:reply, :error, state}
       {:error, error} -> {:reply, {:error, error}, state}
+    end
+  end
+
+  def handle_call({:set_islands, player}, _from, state) do
+    player_board = get_player_board(state, player)
+    with {:ok, rules} <- Rules.check(state.rules, {:set_islands, player}),
+      true <- Board.all_islands_positioned?(player_board)
+    do
+      state
+      |> update_rules(rules)
+      |> reply_with_state({:ok, player_board})
+    else
+      :error -> {:reply, :error, state}
+      false -> {:reply, {:error, :not_all_islands_positioned}, state}
     end
   end
 end

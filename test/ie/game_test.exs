@@ -62,4 +62,34 @@ defmodule IE.GameTest do
       game_pid, :player1, :square, 1, 1
     )
   end
+
+  test "do not allow to set islands when not all islands are positioned" do
+    {:ok, game_pid} = Game.start_link("Player 1")
+    :ok = Game.add_player2(game_pid, "Player 2")
+
+    {:error, :not_all_islands_positioned} = Game.set_island(game_pid, :player1)
+  end
+
+  test "allow to set islands when all islands are positioned" do
+    {:ok, game_pid} = Game.start_link("Player 1")
+    :ok = Game.add_player2(game_pid, "Player 2")
+
+    position_island = fn ({{row, col}, type}) ->
+      Game.position_island(game_pid, :player1, type, row, col)
+    end
+
+    coordinates = [{1, 1}, {7, 1}, {4, 1}, {1, 4}, {4, 4}]
+
+    status_codes = coordinates
+      |> Enum.zip(IE.Island.types)
+      |> Enum.map(position_island)
+
+    {:ok, board} = Game.set_island(game_pid, :player1)
+    state = :sys.get_state(game_pid)
+
+    Enum.map(status_codes, fn (status_code) -> assert status_code == :ok end)
+    assert state.rules.state == :players_set
+    assert state.rules.player1 == :islands_set
+    assert state.player1.board == board
+  end
 end

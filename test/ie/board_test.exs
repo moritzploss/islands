@@ -36,7 +36,7 @@ defmodule IE.BoardTest do
     assert not Board.all_islands_positioned?(board)
   end
 
-  test "all islands positioned" do
+  test "correctly identify all islands as positioned" do
     islands = [{1, 1}, {3, 1}, {4, 1}, {1, 4}, {4, 4}]
       |> Enum.map(result_if_ok(&IE.Coordinate.new/2))
       |> Enum.zip(IE.Island.types)
