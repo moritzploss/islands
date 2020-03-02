@@ -142,8 +142,8 @@ defmodule IE.GameTest do
       %{current_state | rules: %IE.Rules{state: :player1_turn}}
     end)
 
-    {:miss, :none, :no_win} = Game.guess_coordinate(game_pid, :player1, 10, 10)
-    {:miss, :none, :no_win} = Game.guess_coordinate(game_pid, :player2, 10, 10)
+    {:miss, :none, :no_win} = Game.guess_coordinate(game_pid, :player1, 7, 8)
+    {:miss, :none, :no_win} = Game.guess_coordinate(game_pid, :player2, 6, 5)
     {:hit, :none, :no_win} = Game.guess_coordinate(game_pid, :player1, 3, 4)
     {:hit, :dot, :win} = Game.guess_coordinate(game_pid, :player2, 1, 2)
   end
