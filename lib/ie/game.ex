@@ -131,7 +131,8 @@ defmodule IE.Game do
       |> reply_with_state({hit_or_miss, forested_island, win_status})
     else
       :error -> {:reply, :error, state}
-      {:error, :invalid_coordinate} -> {:reply, {:error, :invalid_coordinate}, state}
+      {:error, :invalid_coordinate}
+        -> {:reply, {:error, :invalid_coordinate}, state}
     end
   end
 end
