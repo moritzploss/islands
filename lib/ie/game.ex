@@ -28,6 +28,10 @@ defmodule IE.Game do
     GenServer.call(game, {:set_islands, player})
   end
 
+  def guess_coordinate(game, player, row, col) when player in @players do
+    GenServer.call(game, {:guess_coordinate, player, row, col})
+  end
+
   # GenServer Helper
 
   defp update_player2_name(state, name) do
@@ -42,6 +46,12 @@ defmodule IE.Game do
     Map.update!(state, player, fn player -> %{player | board: board} end)
   end
 
+  defp update_guesses(state, player, hit_or_miss, coordinate) do
+    update_in(state[player].guesses, fn guesses ->
+        Guesses.add(guesses, hit_or_miss, coordinate)
+    end)
+  end
+
   defp reply_with_state(state, reply) do
     {:reply, reply, state}
   end
@@ -49,6 +59,9 @@ defmodule IE.Game do
   defp get_player_board(state, player) do
     Map.get(state, player).board
   end
+
+  defp get_opponent(:player1), do: :player2
+  defp get_opponent(:player2), do: :player1
 
   # GenServer Callbacks
 
@@ -96,6 +109,29 @@ defmodule IE.Game do
     else
       :error -> {:reply, :error, state}
       false -> {:reply, {:error, :not_all_islands_positioned}, state}
+    end
+  end
+
+  def handle_call({:guess_coordinate, player, row, col}, _from, state) do
+    opponent = get_opponent(player)
+    opponent_board = get_player_board(state, opponent)
+    with {:ok, rules}
+        <- Rules.check(state.rules, {:guess_coordinate, player}),
+      {:ok, coordinate}
+        <- Coordinate.new(row, col),
+      {hit_or_miss, forested_island, win_status, opponent_board}
+        <- Board.guess(opponent_board, coordinate),
+      {:ok, rules}
+        <- Rules.check(rules, {:win_check, win_status})
+    do
+      state
+      |> update_board(opponent, opponent_board)
+      |> update_guesses(player, hit_or_miss, coordinate)
+      |> update_rules(rules)
+      |> reply_with_state({hit_or_miss, forested_island, win_status})
+    else
+      :error -> {:reply, :error, state}
+      {:error, :invalid_coordinate} -> {:reply, {:error, :invalid_coordinate}, state}
     end
   end
 end
