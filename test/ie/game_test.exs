@@ -18,11 +18,11 @@ defmodule IE.GameTest do
   end
 
   test "add player2 to game" do
-    {:ok, game_pid} = Game.start_link("Player 1")
-    :ok = Game.add_player2(game_pid, "Player 2")
+    {:ok, game_pid} = Game.start_link("First Player")
+    :ok = Game.add_player2(game_pid, "Second Player")
     state = :sys.get_state(game_pid)
 
-    assert state.player2.name == "Player 2"
+    assert state.player2.name == "Second Player"
   end
 
   test "allow players to position islands", game do
@@ -34,7 +34,7 @@ defmodule IE.GameTest do
   end
 
   test "handle unallowed actions error" do
-    {:ok, game_pid} = Game.start_link("Player 1")
+    {:ok, game_pid} = Game.start_link("First Player")
     :error = Game.position_island(game_pid, :player1, :dot, 1, 1)
   end
 
@@ -107,7 +107,7 @@ defmodule IE.GameTest do
   end
 
   test "don't allow guessing when in initialized state" do
-    {:ok, game_pid} = Game.start_link("Player 1")
+    {:ok, game_pid} = Game.start_link("First Player")
     :error = Game.guess_coordinate(game_pid, :player1, 1, 1)
   end
 
@@ -127,5 +127,10 @@ defmodule IE.GameTest do
     {:miss, :none, :no_win} = Game.guess_coordinate(game.pid, :player2, 6, 5)
     {:hit, :none, :no_win} = Game.guess_coordinate(game.pid, :player1, 3, 4)
     {:hit, :dot, :win} = Game.guess_coordinate(game.pid, :player2, 1, 2)
+  end
+
+  test "enfore unique process names" do
+    {:ok, _pid} = Game.start_link("First Player")
+    {:error, {:already_started, _pid}} = Game.start_link("First Player")
   end
 end

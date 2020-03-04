@@ -9,10 +9,16 @@ defmodule IE.Game do
 
   @players [:player1, :player2]
 
+  # Public interface helper
+
+  defp via_tuple(name) do
+    {:via, Registry, {Registry.Game, name}}
+  end
+
   # Public interface
 
   def start_link(player_name) when is_binary(player_name) do
-    GenServer.start_link(__MODULE__, player_name, [])
+    GenServer.start_link(__MODULE__, player_name, name: via_tuple(player_name))
   end
 
   def add_player2(game, name) when is_binary(name) do
