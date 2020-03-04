@@ -11,7 +11,6 @@ defmodule IE.Game do
 
   # Public interface
 
-  @spec start_link(binary) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(player_name) when is_binary(player_name) do
     GenServer.start_link(__MODULE__, player_name, [])
   end
