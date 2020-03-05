@@ -8,16 +8,16 @@ defmodule IE.Game do
   alias IE.Rules
 
   @players [:player1, :player2]
+  @timeout 60 * 60 * 24 * 1000
 
   # Public interface helper
 
-  defp via_tuple(name) do
+  def via_tuple(name) do
     {:via, Registry, {Registry.Game, name}}
   end
 
   # Public interface
 
-  @spec start_link(binary) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(player_name) when is_binary(player_name) do
     GenServer.start_link(__MODULE__, player_name, name: via_tuple(player_name))
   end
@@ -59,7 +59,7 @@ defmodule IE.Game do
   end
 
   defp reply_with_state(state, reply) do
-    {:reply, reply, state}
+    {:reply, reply, state, @timeout}
   end
 
   defp get_player_board(state, player) do
@@ -74,12 +74,17 @@ defmodule IE.Game do
   def init(player_name) do
     player1 = %{name: player_name, board: Board.new(), guesses: Guesses.new()}
     player2 = %{name: nil, board: Board.new(), guesses: Guesses.new()}
-    {:ok, %{player1: player1, player2: player2, rules: %Rules{}}}
+    {:ok, %{player1: player1, player2: player2, rules: %Rules{}}, @timeout}
+  end
+
+  def handle_info(:timeout, state) do
+    # tagging with :stop triggers terminate/2 callback
+    {:stop, {:shutdown, :timeout}, state}
   end
 
   def handle_call({:add_player, name}, _from, state) do
     case Rules.check(state.rules, :add_player) do
-      :error -> {:reply, :error, state}
+      :error -> {:reply, :error, state, @timeout}
       {:ok, rules} -> state
                       |> update_player2_name(name)
                       |> update_rules(rules)
@@ -99,8 +104,8 @@ defmodule IE.Game do
       |> update_rules(rules)
       |> reply_with_state(:ok)
     else
-      :error -> {:reply, :error, state}
-      {:error, error} -> {:reply, {:error, error}, state}
+      :error -> {:reply, :error, state, @timeout}
+      {:error, error} -> {:reply, {:error, error}, state, @timeout}
     end
   end
 
@@ -113,8 +118,8 @@ defmodule IE.Game do
       |> update_rules(rules)
       |> reply_with_state({:ok, player_board})
     else
-      :error -> {:reply, :error, state}
-      false -> {:reply, {:error, :not_all_islands_positioned}, state}
+      :error -> {:reply, :error, state, @timeout}
+      false -> {:reply, {:error, :not_all_islands_positioned}, state, @timeout}
     end
   end
 
@@ -136,9 +141,9 @@ defmodule IE.Game do
       |> update_rules(rules)
       |> reply_with_state({hit_or_miss, forested_island, win_status})
     else
-      :error -> {:reply, :error, state}
+      :error -> {:reply, :error, state, @timeout}
       {:error, :invalid_coordinate}
-        -> {:reply, {:error, :invalid_coordinate}, state}
+        -> {:reply, {:error, :invalid_coordinate}, state, @timeout}
     end
   end
 end
