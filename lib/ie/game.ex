@@ -61,6 +61,7 @@ defmodule IE.Game do
   end
 
   defp reply_with_state(state, reply) do
+    :ets.insert(:game_state, {state.player1.name, state})
     {:reply, reply, state, @timeout}
   end
 
@@ -73,15 +74,42 @@ defmodule IE.Game do
 
   # GenServer Callbacks
 
-  def init(player_name) do
+  defp fresh_state(player_name) do
     player1 = %{name: player_name, board: Board.new(), guesses: Guesses.new()}
     player2 = %{name: nil, board: Board.new(), guesses: Guesses.new()}
-    {:ok, %{player1: player1, player2: player2, rules: %Rules{}}, @timeout}
+    %{player1: player1, player2: player2, rules: %Rules{}}
+  end
+
+  defp initialize_fresh_state(player_name) do
+    state = fresh_state(player_name)
+    :ets.insert(:game_state, {player_name, state})
+    state
+  end
+
+  # GenServer Callbacks
+
+  def init(player_name) do
+    state =
+      case :ets.lookup(:game_state, player_name) do
+        [] -> initialize_fresh_state(player_name)
+        [{_key, state}] -> state
+      end
+    {:ok, state, @timeout}
   end
 
   def handle_info(:timeout, state) do
-    # tagging with :stop triggers terminate/2 callback
+    # tagging with :stop triggers terminate/2 callback and pass in middle term
+    # as first argument
     {:stop, {:shutdown, :timeout}, state}
+  end
+
+  def terminate({:shutdown, :timeout}, state) do
+    :ets.delete(:game_state, state.player1.name)
+    :ok
+  end
+
+  def terminate(_reason, _state) do
+    :ok
   end
 
   def handle_call({:add_player, name}, _from, state) do

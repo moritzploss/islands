@@ -26,6 +26,7 @@ defmodule IE.GameSupervisor do
   end
 
   def stop_game(player_name) do
+    :ets.delete(:game_state, player_name)
     DynamicSupervisor.terminate_child(__MODULE__, pid_from_name(player_name))
   end
 end

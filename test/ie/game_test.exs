@@ -1,8 +1,9 @@
 defmodule IE.GameTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   alias IE.Game
 
   setup do
+    :ets.delete_all_objects(:game_state)
     {:ok, game_pid} = Game.start_link("Player 1")
     :ok = Game.add_player2(game_pid, "Player 2")
     %{pid: game_pid}
@@ -132,5 +133,10 @@ defmodule IE.GameTest do
   test "enfore unique process names" do
     {:ok, _pid} = Game.start_link("First Player")
     {:error, {:already_started, _pid}} = Game.start_link("First Player")
+  end
+
+  test "write freshly initialized state to game_state table", default do
+    [{_key, state}] = :ets.lookup(:game_state, "Player 1")
+    assert :sys.get_state(default.pid) == state
   end
 end
