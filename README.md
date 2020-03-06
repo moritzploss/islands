@@ -15,6 +15,10 @@ Install the `Elixir` dependencies:
 
     mix deps.get
 
+Install the `Phoenix` archive:
+
+    mix archive.install hex phx_new 1.4.15
+
 Compile the project:
 
     mix compile
