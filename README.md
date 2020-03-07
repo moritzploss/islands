@@ -2,9 +2,7 @@
 
 # Islands
 
-This repo contains an implementation of *Islands*, a classic boardgame similar to (but more pacifistic than) *Battleship*.
-
-The project was built based on the book
+This repo contains an implementation of *Islands*, a classic boardgame similar to (but more pacifistic than) *Battleship*. The project was built based on the book
 *Functional Web Development with Elixir, OTP, and Phoenix* by Lance Halvorsen.
 
 The game logic is contained in the `islands_engine` directory; the `Phoenix` app
