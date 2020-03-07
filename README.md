@@ -57,6 +57,10 @@ Run the app inside `IEx`:
 
     iex -S mix phx.server
 
+Visualize the dependency tree:
+
+    mix deps.tree
+
 ## Working with `IEx`
 
 Start an `IEx` session inside any of the project directories with the

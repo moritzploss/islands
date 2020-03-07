@@ -38,7 +38,11 @@ defmodule IslandsInterface.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:islands_engine, path: "../islands_engine"},
+      {:credo, "~> 1.2", only: [:dev, :test], runtime: false},
+      {:credo_naming, "~> 0.4", only: [:dev, :test], runtime: false},
+      {:credo_contrib, "~> 0.2.0", only: [:dev, :test], runtime: false}
     ]
   end
 end
