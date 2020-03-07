@@ -8,12 +8,15 @@ The project was built based on the book
 *Functional Web Development with Elixir, OTP, and Phoenix* by Lance Halvorsen.
 
 The game logic is contained in the `islands_engine` directory; the `Phoenix` app
-can be found inside `islands_interface`. Follow the steps below to
-get the project up and running. 
+can be found inside `islands_interface`. Follow the steps below to get the
+project up and running. 
 
 ## Getting Started
 
-### Before you start
+### Basic Setup
+
+The following assumes that you have a working installation of `Elixir`
+(including `mix`) and `Node.js` (including `npm`).
 
 Install the `Phoenix` archive:
 
@@ -43,8 +46,12 @@ Run the linter:
 
 ### Islands Interface (Phoenix App)
 
-Inside the `islands_interface` directory, start the `Phoenix` app on
-`localhost:4000`:
+Inside the `islands_interface` directory, install the dependencies:
+
+    mix deps.get
+    cd assets && npm install
+
+Then start the `Phoenix` app on `localhost:4000`:
 
     mix phx.server
 
@@ -52,7 +59,7 @@ Run the app inside `IEx`:
 
     iex -S mix phx.server
 
-### Working with `IEx`
+## Working with `IEx`
 
 Start an `IEx` session inside any of the project directories with the
 respective `Application` loaded:
