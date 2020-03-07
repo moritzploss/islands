@@ -1,6 +1,9 @@
 defmodule IslandsInterfaceWeb.UserSocket do
   use Phoenix.Socket
 
+  # any message starting with 'game:*' will go through GameChannel
+  channel "game:*", IslandsInterfaceWeb.GameChannel
+
   ## Channels
   # channel "room:*", IslandsInterfaceWeb.RoomChannel
 
