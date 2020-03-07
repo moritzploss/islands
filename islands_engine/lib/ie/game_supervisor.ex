@@ -20,7 +20,11 @@ defmodule IE.GameSupervisor do
   end
 
   def start_game(player_name) do
-    spec = %{id: Game, start: {Game, :start_link, [player_name]}, restart: :transient}
+    spec = %{
+      id: Game,
+      start: {Game, :start_link, [player_name]},
+      restart: :transient
+    }
     # spec = {IE.Game, player_name: player_name}
     DynamicSupervisor.start_child(__MODULE__, spec)
   end

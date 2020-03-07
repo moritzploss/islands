@@ -12,7 +12,7 @@ defmodule IE.Island do
 
   defp offsets(:s_shape), do: [{0, 1}, {0, 2}, {1, 0}, {1, 1}]
 
-  defp offsets(_), do: {:error, :invalid_island_type}
+  defp offsets(_type), do: {:error, :invalid_island_type}
 
   def new(type, %IE.Coordinate{} = upper_left) do
     with [_|_] = offsets <- offsets(type),
