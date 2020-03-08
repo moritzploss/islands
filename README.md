@@ -15,10 +15,6 @@ project up and running.
 The following assumes that you have a working installation of `Elixir`
 (including `mix`) and `Node.js` (including `npm`).
 
-Install the `Phoenix` archive:
-
-    mix archive.install hex phx_new 1.4.15
-
 ### Islands Engine (Game Logic)
 
 Inside the `islands_engine` directory, install the `Elixir` dependencies:
@@ -29,19 +25,11 @@ Compile the project:
 
     mix compile
 
-Run the tests:
-
-    mix test --cover
-
-Format the code:
-
-    mix format
-
-Run the linter:
-
-    mix credo --strict --all
-
 ### Islands Interface (Phoenix App)
+
+Globally install the `Phoenix` archive:
+
+    mix archive.install hex phx_new 1.4.15
 
 Inside the `islands_interface` directory, install the dependencies:
 
@@ -56,20 +44,26 @@ Run the app inside `IEx`:
 
     iex -S mix phx.server
 
+### Useful `mix` Commands
+
+After completing the steps outlined above, the following commands can be used 
+both inside the `islands_engine` and the `islands_interface` directory.
+
+Run the tests:
+
+    mix test --cover
+
+Format the code:
+
+    mix format
+
+Run the linter:
+
+    mix credo --strict --all
+
 Visualize the dependency tree:
 
     mix deps.tree
-
-## Working with `IEx`
-
-Start an `IEx` session inside any of the project directories with the
-respective `Application` loaded:
-
-    iex -S mix
-
-Recompile the project from within `IEx`:
-
-    recompile()
 
 ## Useful Links
 
