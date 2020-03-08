@@ -8,7 +8,7 @@ defmodule IslandsInterfaceWeb.PageController do
   end
 
   def test(conn, %{"name" => name}) do
-    {:ok, pid} = GameSupervisor.start_game(name)
+    {:ok, _pid} = GameSupervisor.start_game(name)
     conn
     |> put_flash(:info, "You entered the name: " <> name)
     |> render("index.html")

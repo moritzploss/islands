@@ -24,13 +24,15 @@ defmodule IslandsInterfaceWeb.ChannelCase do
 
       # The default endpoint for testing
       @endpoint IslandsInterfaceWeb.Endpoint
+
+      # setup do
+      #   {:ok, _, socket} = subscribe_and_join(
+      #     socket("testUser", %{some: :assign}),
+      #     IslandsInterfaceWeb.GameChannel,
+      #     "game:testUser"
+      #   )
+      #   {:ok, socket: socket}
+      # end
     end
-  end
-
-  setup _tags do
-    # {:ok, _, socket} =
-    #   socket("user_id", %{some: :assign}) = subscribe_and_join(RoomChannel, "game:test")
-
-    # {:ok, socket: socket}
   end
 end
