@@ -15,8 +15,10 @@ jobs:
         elixir-version: 1.10.1 # Define the elixir version [required]
         otp-version: 22.2 # Define the OTP version [required]
     - name: Install Dependencies
-      run: cd islands_engine/
-      run: mix deps.get
+      run:  |
+        cd islands_engine/
+        mix deps.get
     - name: Run Tests
-      run: cd islands_engine/
-      run: mix test --cover
+      run: |
+        cd islands_engine/
+        mix test --cover

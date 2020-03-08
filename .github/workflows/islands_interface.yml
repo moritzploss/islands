@@ -15,10 +15,12 @@ jobs:
         elixir-version: 1.10.1 # Define the elixir version [required]
         otp-version: 22.2 # Define the OTP version [required]
     - name: Install Dependencies
-      run: cd islands_interface
-      run: mix archive.install hex phx_new 1.4.15
-      run: mix deps.get
-      run: cd assets && npm install
+      run: |
+        cd islands_interface
+        mix archive.install hex phx_new 1.4.15
+        mix deps.get
+        cd assets && npm install
     - name: Run Tests
-      run: cd islands_interface/
-      run: mix test --cover
+      run:  |
+        cd islands_interface/
+        mix test --cover
