@@ -28,6 +28,9 @@ defmodule IslandsInterfaceWeb.ChannelCase do
   end
 
   setup _tags do
-    :ok
+    # {:ok, _, socket} =
+    #   socket("user_id", %{some: :assign}) = subscribe_and_join(RoomChannel, "game:test")
+
+    # {:ok, socket: socket}
   end
 end
