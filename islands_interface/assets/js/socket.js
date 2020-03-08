@@ -6,9 +6,9 @@
 //
 // Pass the token on params as below. Or remove it
 // from the params if you are not using authentication.
-import {Socket} from "phoenix"
+import { Socket } from "phoenix";
 
-let socket = new Socket("/socket", {params: {token: window.userToken}})
+const socket = new Socket("/socket", { params: { token: window.userToken } });
 
 // When you connect, you'll often need to authenticate the client.
 // For example, imagine you have an authentication plug, `MyAuth`,
@@ -54,10 +54,31 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 // Finally, connect to the socket:
 socket.connect()
 
-// Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("game:subtopic", {})
-channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+const createChannel = (socket, subtopic, screenName, topic = 'game') => {
+  const channel = socket.channel(
+    [topic, subtopic].join(':'),
+    { screen_name: screenName },
+  );
+  channel.on('player_added', (reply) => console.log('Player added!', reply))
 
-export default socket
+  return channel;
+};
+
+const joinChannel = (channel) => channel
+  .join()
+  .receive('ok', (reply) => console.log(`Successfully joined '${channel.topic}'`, reply))
+  .receive('error', (reply) => console.log(`Unable to join '${channel.topic}'`, reply));
+
+const startNewGame = (channel) => channel
+  .push('new_game')
+  .receive('ok', (reply) => console.log('started new game', reply))
+  .receive('error', (reply) => console.log('could not start new game', reply));
+
+const addPlayer = (channel, playerName) => channel
+  .push('add_player', playerName)
+  .receive('error', (reply) => console.log(`Unable to add new player ${playerName}`, reply));
+
+const channel = createChannel(socket, 'mo', 'Mo');
+joinChannel(channel);
+
+export default socket;
