@@ -1,5 +1,4 @@
-![Tests](https://github.com/moritzploss/islands/workflows/Tests/badge.svg)
-
+![Islands Engine](https://github.com/moritzploss/islands/workflows/Islands%20Engine/badge.svg) ![Islands Interface](https://github.com/moritzploss/islands/workflows/Islands%20Interface/badge.svg)
 # Islands
 
 This repo contains an implementation of *Islands*, a classic boardgame similar to (but more pacifistic than) *Battleship*. The project was built based on the book
