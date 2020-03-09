@@ -16,6 +16,8 @@ defmodule IslandsInterfaceWeb.ChannelCase do
   """
 
   use ExUnit.CaseTemplate
+  import Ecto
+
 
   using do
     quote do
@@ -25,14 +27,19 @@ defmodule IslandsInterfaceWeb.ChannelCase do
       # The default endpoint for testing
       @endpoint IslandsInterfaceWeb.Endpoint
 
-      # setup do
-      #   {:ok, _, socket} = subscribe_and_join(
-      #     socket("testUser", %{some: :assign}),
-      #     IslandsInterfaceWeb.GameChannel,
-      #     "game:testUser"
-      #   )
-      #   {:ok, socket: socket}
-      # end
+      setup do
+        start_game = fn ->
+            {:ok, _, socket} = subscribe_and_join(
+              socket("socket_id", %{}),
+              IslandsInterfaceWeb.GameChannel,
+              "game:#{Ecto.UUID.generate}"
+            )
+            push(socket, "new_game")
+            push(socket, "add_player", "player 2")
+            {:ok, socket}
+        end
+        {:ok, start_game: start_game}
+      end
     end
   end
 end

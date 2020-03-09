@@ -21,7 +21,7 @@ defmodule IslandsInterfaceWeb.GameChannel do
     {:reply, reply_paylod, socket}
   end
 
-  def handle_in("add_player", player_name, socket) do
+  def handle_in("add_player", player_name, socket) when is_binary(player_name) do
     game_pid = via(socket.topic)
     case Game.add_player2(game_pid, player_name) do
       :ok ->
@@ -31,5 +31,51 @@ defmodule IslandsInterfaceWeb.GameChannel do
         {:noreply, socket}
       :error -> {:reply, :error, socket}
     end
+  end
+
+  def handle_in("position_island",  %{"col" => col, "player" => player, "row" => row, "type" => type}, socket) do
+    player = String.to_existing_atom(player)
+    type = String.to_existing_atom(type)
+
+    case Game.position_island(via(socket.topic), player, type, row, col) do
+      :ok -> {:reply, :ok, socket}
+      _ -> {:reply, :error, socket}
+    end
+  end
+
+  def handle_in("set_islands", %{"player" => player}, socket) do
+    player_as_atom = String.to_existing_atom(player)
+
+    reply_payload =
+      case Game.set_island(via(socket.topic), player_as_atom) do
+        {:ok, board} ->
+          broadcast!(socket, "player_set_islands", %{player: player})
+          {:ok, %{board: board}}
+        {:error, reason} -> {:error, %{reason: inspect(reason)}}
+      end
+    {:reply, reply_payload, socket}
+  end
+
+  def handle_in("guess_coordinate", %{"player" => player, "row" => row, "col" => col}, socket) do
+    player_as_atom = String.to_existing_atom(player)
+
+    case Game.guess_coordinate(via(socket.topic), player_as_atom, row, col) do
+      {hit_or_miss, island, win} ->
+        result = %{hit: hit_or_miss === :hit, island: island, win: win}
+        broadcast!(
+          socket,
+          "player_guessed_coordinate",
+          %{player: player, row: row, col: col, result: result}
+        )
+        {:noreply, socket}
+      :error ->
+        {:reply, {:error, %{player: player, reason: "Not your turn"}}, socket}
+      {:error, reason} ->
+        {:reply, {:error, %{player: player, reason: inspect(reason)}}, socket}
+    end
+  end
+
+  def handle_in(_event, _payload, socket) do
+    {:reply, :error, socket}
   end
 end

@@ -1,6 +1,6 @@
 {application,islands_interface,
              [{applications,[kernel,stdlib,elixir,logger,runtime_tools,
-                             gettext,islands_engine,jason,phoenix_pubsub,
+                             gettext,islands_engine,jason,ecto,phoenix_pubsub,
                              phoenix_html,plug_cowboy,phoenix]},
               {description,"islands_interface"},
               {modules,['Elixir.IslandsInterface',

@@ -42,7 +42,8 @@ defmodule IslandsInterface.MixProject do
       {:islands_engine, path: "../islands_engine"},
       {:credo, "~> 1.2", only: [:dev, :test], runtime: false},
       {:credo_naming, "~> 0.4", only: [:dev, :test], runtime: false},
-      {:credo_contrib, "~> 0.2.0", only: [:dev, :test], runtime: false}
+      {:credo_contrib, "~> 0.2.0", only: [:dev, :test], runtime: false},
+      {:ecto, "~> 3.3.4"}
     ]
   end
 end
