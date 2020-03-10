@@ -28,17 +28,14 @@ defmodule IslandsInterfaceWeb.ChannelCase do
       @endpoint IslandsInterfaceWeb.Endpoint
 
       setup do
-        start_game = fn ->
-            {:ok, _, socket} = subscribe_and_join(
-              socket("socket_id", %{}),
-              IslandsInterfaceWeb.GameChannel,
-              "game:#{Ecto.UUID.generate}"
-            )
-            push(socket, "new_game")
-            push(socket, "add_player", "player 2")
-            {:ok, socket}
-        end
-        {:ok, start_game: start_game}
+        {:ok, _, socket} = subscribe_and_join(
+          socket("socket_id", %{}),
+          IslandsInterfaceWeb.GameChannel,
+          "game:#{Ecto.UUID.generate}"
+        )
+        push(socket, "new_game")
+        push(socket, "add_player", "player 2")
+        {:ok, socket: socket}
       end
     end
   end

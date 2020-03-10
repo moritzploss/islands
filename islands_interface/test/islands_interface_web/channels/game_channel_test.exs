@@ -14,20 +14,16 @@ defmodule IslandsInterfaceWeb.GameChannelTest do
     assert_reply ref, :error
   end
 
-  test "add second player to game", %{start_game: start_game} do
-    {:ok, _socket} = start_game.()
+  test "add second player to game", %{socket: socket} do
     assert_broadcast "player added", %{message: _success_message}
   end
 
-  test "only allow two players per game", %{start_game: start_game} do
-    {:ok, socket} = start_game.()
+  test "only allow two players per game", %{socket: socket} do
     ref = push(socket, "add_player", "player 3")
     assert_reply ref, :error
   end
 
-  test "position island", %{start_game: start_game} do
-    {:ok, socket} = start_game.()
-
+  test "position island", %{socket: socket} do
     ref = push(socket, "position_island", %{
       player: "player1",
       type: "dot",
@@ -37,8 +33,7 @@ defmodule IslandsInterfaceWeb.GameChannelTest do
     assert_reply ref, :ok
   end
 
-  test "refuse positioning with invalid payload", %{start_game: start_game} do
-    {:ok, socket} = start_game.()
+  test "refuse positioning with invalid payload", %{socket: socket} do
     ref = push(socket, "position_island", %{
       foo: "player1",
       type: "dot",
@@ -48,9 +43,7 @@ defmodule IslandsInterfaceWeb.GameChannelTest do
     assert_reply ref, :error
   end
 
-  test "player can set islands after positioning", %{start_game: start_game} do
-    {:ok, socket} = start_game.()
-
+  test "player can set islands after positioning", %{socket: socket} do
     position_island = fn ({{row, col}, type}, player) ->
       push(socket, "position_island", %{
         player: Atom.to_string(player),
@@ -71,9 +64,7 @@ defmodule IslandsInterfaceWeb.GameChannelTest do
     assert_reply ref2, :error
   end
 
-  test "players can guess island coordinates", %{start_game: start_game} do
-    {:ok, socket} = start_game.()
-
+  test "players can guess island coordinates", %{socket: socket} do
     position_island = fn ({{row, col}, type}, player) ->
       push(socket, "position_island", %{
         player: Atom.to_string(player),
