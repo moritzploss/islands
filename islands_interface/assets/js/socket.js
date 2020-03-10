@@ -106,8 +106,8 @@ joinChannel(channel);
 startNewGame(channel);
 addPlayer(channel, 'Another Player');
 
-const islandCoordinates = [[1, 1], [7, 1], [4, 1], [1, 4], [4, 4]]
-const islandTypes = ['atoll', 'dot', 'l_shape', 's_shape', 'square']
+const islandCoordinates = [[1, 1], [7, 1], [4, 1], [1, 4], [4, 4]];
+const islandTypes = ['atoll', 'dot', 'l_shape', 's_shape', 'square'];
 
 islandCoordinates.forEach(([row, col], index) => {
   positionIsland(channel, "player1", islandTypes[index], row, col);
