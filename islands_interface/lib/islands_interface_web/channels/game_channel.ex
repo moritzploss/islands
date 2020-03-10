@@ -69,7 +69,7 @@ defmodule IslandsInterfaceWeb.GameChannel do
 
   def handle_in("position_island",  %{"col" => col, "player" => player, "row" => row, "type" => type}, socket) do
     player = String.to_existing_atom(player)
-    type = String.to_existing_atom(type)
+    type = String.to_atom(type)
 
     case Game.position_island(via(socket.topic), player, type, row, col) do
       :ok -> {:reply, :ok, socket}
@@ -79,12 +79,12 @@ defmodule IslandsInterfaceWeb.GameChannel do
 
   def handle_in("set_islands", %{"player" => player}, socket) do
     player_as_atom = String.to_existing_atom(player)
-
+    IO.inspect player_as_atom
     reply_payload =
       case Game.set_island(via(socket.topic), player_as_atom) do
         {:ok, board} ->
           broadcast!(socket, "player_set_islands", %{player: player})
-          {:ok, %{board: board}}
+          {:ok, %{board: ""}}
         {:error, reason} -> {:error, %{reason: inspect(reason)}}
       end
     {:reply, reply_payload, socket}

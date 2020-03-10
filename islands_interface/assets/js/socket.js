@@ -6,9 +6,10 @@
 //
 // Pass the token on params as below. Or remove it
 // from the params if you are not using authentication.
-import { Socket } from "phoenix";
+import { Socket } from 'phoenix';
+import uuid from 'uuid/v4';
 
-const socket = new Socket("/socket", { params: { token: window.userToken } });
+const socket = new Socket('/socket', { params: { token: window.userToken } });
 
 // When you connect, you'll often need to authenticate the client.
 // For example, imagine you have an authentication plug, `MyAuth`,
@@ -61,25 +62,94 @@ const createChannel = (socket, subtopic, screenName, topic = 'game') => {
   );
   channel.on('player_added', (reply) => console.log('Player added!', reply))
   channel.on('subscribers', (reply) => console.log('These players joined:', reply))
-
+  channel.on('player_guessed_coordinate', (reply) => console.log('Player guessed coordinate:', reply))
   return channel;
 };
 
+// use these functions to play the game
+
 const joinChannel = (channel) => channel
   .join()
-  .receive('ok', (reply) => console.log(`Successfully joined '${channel.topic}'`, reply))
-  .receive('error', (reply) => console.log(`Unable to join '${channel.topic}'`, reply));
+  .receive('ok', (reply) => console.log(`Successfully joined '${channel.topic}':`, reply))
+  .receive('error', (reply) => console.log(`Unable to join '${channel.topic}':`, reply));
 
 const startNewGame = (channel) => channel
   .push('new_game')
-  .receive('ok', (reply) => console.log('started new game', reply))
-  .receive('error', (reply) => console.log('could not start new game', reply));
+  .receive('ok', (reply) => console.log('Started new game:', reply))
+  .receive('error', (reply) => console.log('Could not start new game:', reply));
 
 const addPlayer = (channel, playerName) => channel
   .push('add_player', playerName)
-  .receive('error', (reply) => console.log(`Unable to add new player ${playerName}`, reply));
+  .receive('error', (reply) => console.log(`Unable to add new player ${playerName}:`, reply));
 
-const channel = createChannel(socket, 'mo', 'Mo');
+const positionIsland = (channel, player, type, row, col) => channel
+  .push('position_island', { player, type, row, col })
+  .receive('ok', (reply) => console.log('Island positioned:', reply))
+  .receive('error', (reply) => console.log('Unable to position island:', reply));
+
+const setIslands = (channel, player) => channel
+  .push('set_islands', { player })
+  .receive('ok', (reply) => console.log('Here is the board:', reply))
+  .receive('error', (reply) => console.log('Unable to set islands:', reply));
+
+const guessCoordinate = (channel, player, row, col) => channel
+  .push('guess_coordinate', { player, row, col })
+  .receive('error', (reply) => console.log('Unable to guess a coordinate:', reply));
+
+
+// here's a complete example game that will play automatically once you load
+// the page. check your browser's console for the output.
+
+const channel = createChannel(socket, uuid(), 'Mo');
+
 joinChannel(channel);
+startNewGame(channel);
+addPlayer(channel, 'Another Player');
+
+const islandCoordinates = [[1, 1], [7, 1], [4, 1], [1, 4], [4, 4]]
+const islandTypes = ['atoll', 'dot', 'l_shape', 's_shape', 'square']
+
+islandCoordinates.forEach(([row, col], index) => {
+  positionIsland(channel, "player1", islandTypes[index], row, col);
+  positionIsland(channel, "player2", islandTypes[index], row, col);
+});
+
+setIslands(channel, 'player1');
+setIslands(channel, 'player2');
+
+const winningGuesses = [
+  // atoll
+  { col: 1, row: 1 },
+  { col: 1, row: 3 },
+  { col: 2, row: 1 },
+  { col: 2, row: 2 },
+  { col: 2, row: 3 },
+  
+  // dot
+  { col: 1, row: 7 },
+
+  // l_shape
+  { col: 1, row: 4 },
+  { col: 1, row: 5 },
+  { col: 1, row: 6 },
+  { col: 2, row: 6 },
+
+  // s_shape
+  { col: 4, row: 2 },
+  { col: 5, row: 1 },
+  { col: 5, row: 2 },
+  { col: 6, row: 1 },
+
+  // square
+  { col: 4, row: 4 },
+  { col: 4, row: 5 },
+  { col: 5, row: 4 },
+  { col: 5, row: 5 },
+]
+
+winningGuesses.forEach(({ row, col }) => {
+  guessCoordinate(channel, 'player1', row, col);
+  guessCoordinate(channel, 'player2', row, col);
+});
 
 export default socket;
