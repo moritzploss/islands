@@ -9,7 +9,8 @@ defmodule IslandsInterface.Application do
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts
-      IslandsInterfaceWeb.Endpoint
+      IslandsInterfaceWeb.Endpoint,
+      IslandsInterfaceWeb.Presence
       # Starts a worker by calling: IslandsInterface.Worker.start_link(arg)
       # {IslandsInterface.Worker, arg},
     ]

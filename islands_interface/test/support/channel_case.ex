@@ -16,8 +16,10 @@ defmodule IslandsInterfaceWeb.ChannelCase do
   """
 
   use ExUnit.CaseTemplate
+
   import Ecto
 
+  alias IslandsInterfaceWeb.UserSocket
 
   using do
     quote do
@@ -29,9 +31,10 @@ defmodule IslandsInterfaceWeb.ChannelCase do
 
       setup do
         {:ok, _, socket} = subscribe_and_join(
-          socket("socket_id", %{}),
+          socket(UserSocket, "socket_id", %{}),
           IslandsInterfaceWeb.GameChannel,
-          "game:#{Ecto.UUID.generate}"
+          "game:#{Ecto.UUID.generate}",
+          %{"screen_name" => "Name"}
         )
         push(socket, "new_game")
         push(socket, "add_player", "player 2")

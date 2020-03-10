@@ -1,11 +1,14 @@
 defmodule IslandsInterfaceWeb.GameChannelTest do
   use IslandsInterfaceWeb.ChannelCase
 
+  alias IslandsInterfaceWeb.UserSocket
+
   test "only start one game per player" do
     {:ok, _, socket} = subscribe_and_join(
-      socket("socket_id", %{}),
+      socket(UserSocket, "socket_id", %{}),
       IslandsInterfaceWeb.GameChannel,
-      "game:b"
+      "game:#{Ecto.UUID.generate}",
+      %{"screen_name" => "Name"}
     )
 
     push(socket, "new_game")
@@ -14,7 +17,7 @@ defmodule IslandsInterfaceWeb.GameChannelTest do
     assert_reply ref, :error
   end
 
-  test "add second player to game", %{socket: socket} do
+  test "add second player to game", %{socket: _socket} do
     assert_broadcast "player added", %{message: _success_message}
   end
 

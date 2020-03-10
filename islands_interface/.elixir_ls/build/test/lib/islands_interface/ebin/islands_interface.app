@@ -16,6 +16,7 @@
                         'Elixir.IslandsInterfaceWeb.LayoutView',
                         'Elixir.IslandsInterfaceWeb.PageController',
                         'Elixir.IslandsInterfaceWeb.PageView',
+                        'Elixir.IslandsInterfaceWeb.Presence',
                         'Elixir.IslandsInterfaceWeb.Router',
                         'Elixir.IslandsInterfaceWeb.Router.Helpers',
                         'Elixir.IslandsInterfaceWeb.UserSocket']},

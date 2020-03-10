@@ -60,6 +60,7 @@ const createChannel = (socket, subtopic, screenName, topic = 'game') => {
     { screen_name: screenName },
   );
   channel.on('player_added', (reply) => console.log('Player added!', reply))
+  channel.on('subscribers', (reply) => console.log('These players joined:', reply))
 
   return channel;
 };
