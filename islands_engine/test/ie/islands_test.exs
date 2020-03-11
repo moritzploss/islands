@@ -72,4 +72,22 @@ defmodule IE.IslandsTest do
 
     assert not Island.forested?(unforrested_island)
   end
+
+  test "serialize island" do
+    {:ok, upper_left} = IE.Coordinate.new(1, 2)
+    {:ok, island} = Island.new(:atoll, upper_left)
+
+    expected = %{
+      coordinates: [
+        %{col: 2, row: 1},
+        %{col: 2, row: 3},
+        %{col: 3, row: 1},
+        %{col: 3, row: 2},
+        %{col: 3, row: 3}
+      ],
+      hit_coordinates: []
+    }
+
+    assert expected === Island.serialize(island)
+  end
 end

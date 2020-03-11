@@ -58,4 +58,20 @@ defmodule IE.Island do
   end
 
   def types, do: [:atoll, :dot, :l_shape, :s_shape, :square]
+
+  def serialize(%IE.Island{} = island) do
+    island_map = Map.from_struct(island)
+
+    serialize_coordinates = fn key, acc ->
+      Map.put(acc, key,
+        Map.fetch!(island_map, key)
+        |> MapSet.to_list
+        |> Enum.map(&IE.Coordinate.serialize(&1))
+      )
+    end
+
+    island_map
+    |> Map.keys()
+    |> Enum.reduce(Map.new(), serialize_coordinates)
+  end
 end

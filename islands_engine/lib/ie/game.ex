@@ -86,6 +86,7 @@ defmodule IE.Game do
 
   # GenServer Callbacks
 
+  @impl true
   def init(player_name) do
     # blocks thread. make asynchronous when used with real database
     state =
@@ -96,12 +97,14 @@ defmodule IE.Game do
     {:ok, state, @timeout}
   end
 
+  @impl true
   def handle_info(:timeout, state) do
     # tagging with :stop triggers terminate/2 callback and pass in middle term
     # as first argument
     {:stop, {:shutdown, :timeout}, state}
   end
 
+  @impl true
   def terminate({:shutdown, :timeout}, state) do
     :ets.delete(:game_state, state.player1.name)
     :ok
@@ -111,6 +114,7 @@ defmodule IE.Game do
     :ok
   end
 
+  @impl true
   def handle_call({:add_player, name}, _from, state) do
     case Rules.check(state.rules, :add_player) do
       :error -> {:reply, :error, state, @timeout}
@@ -121,6 +125,7 @@ defmodule IE.Game do
     end
   end
 
+  @impl true
   def handle_call({:position_island, player, island_type, row, col}, _from, state) do
     player_board = get_player_board(state, player)
     with {:ok, rules} <- Rules.check(state.rules, {:position_island, player}),
@@ -138,6 +143,7 @@ defmodule IE.Game do
     end
   end
 
+  @impl true
   def handle_call({:set_islands, player}, _from, state) do
     player_board = get_player_board(state, player)
     with {:ok, rules} <- Rules.check(state.rules, {:set_islands, player}),
@@ -152,6 +158,7 @@ defmodule IE.Game do
     end
   end
 
+  @impl true
   def handle_call({:guess_coordinate, player, row, col}, _from, state) do
     opponent = get_opponent(player)
     opponent_board = get_player_board(state, opponent)

@@ -12,4 +12,8 @@ defmodule IE.Coordinate do
     {:error, :invalid_coordinate}
   end
 
+  def serialize(%IE.Coordinate{} = coordinate) do
+     Map.from_struct(coordinate)
+  end
+
 end

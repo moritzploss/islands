@@ -79,11 +79,11 @@ defmodule IslandsInterfaceWeb.GameChannel do
 
   def handle_in("set_islands", %{"player" => player}, socket) do
     player_as_atom = String.to_existing_atom(player)
-    IO.inspect player_as_atom
     reply_payload =
       case Game.set_island(via(socket.topic), player_as_atom) do
         {:ok, board} ->
           broadcast!(socket, "player_set_islands", %{player: player})
+          IO.inspect board
           {:ok, %{board: ""}}
         {:error, reason} -> {:error, %{reason: inspect(reason)}}
       end

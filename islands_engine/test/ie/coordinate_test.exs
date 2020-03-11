@@ -16,4 +16,9 @@ defmodule IE.CoordinateTest do
     {:error, _} = Coordinate.new(10, 11)
     {:error, _} = Coordinate.new(11, 10)
   end
+
+  test "serialize coordinate" do
+    {:ok, coordinate} = Coordinate.new(1, 10)
+    assert Coordinate.serialize(coordinate) === %{row: 1, col: 10}
+  end
 end
