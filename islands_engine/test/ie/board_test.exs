@@ -89,4 +89,24 @@ defmodule IE.BoardTest do
       end
     )
   end
+
+  test "serialize board", default do
+    board_with_square = Board.position_island(
+      default.board, :square, default.island
+    )
+
+    expected = %{
+      square: %{
+        coordinates: [
+          %{col: 2, row: 2},
+          %{col: 2, row: 3},
+          %{col: 3, row: 2},
+          %{col: 3, row: 3}
+        ],
+        hit_coordinates: []
+      }
+    }
+
+    assert Board.serialize(board_with_square) === expected
+  end
 end

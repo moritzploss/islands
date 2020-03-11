@@ -1,7 +1,7 @@
 defmodule IslandsInterfaceWeb.GameChannel do
   use IslandsInterfaceWeb, :channel
 
-  alias IE.{Game, GameSupervisor}
+  alias IE.{Game, GameSupervisor, Board}
   alias IslandsInterfaceWeb.Presence
 
   defp via("game:" <> player_name) do
@@ -83,8 +83,7 @@ defmodule IslandsInterfaceWeb.GameChannel do
       case Game.set_island(via(socket.topic), player_as_atom) do
         {:ok, board} ->
           broadcast!(socket, "player_set_islands", %{player: player})
-          IO.inspect board
-          {:ok, %{board: ""}}
+          {:ok, %{board: Board.serialize(board)}}
         {:error, reason} -> {:error, %{reason: inspect(reason)}}
       end
     {:reply, reply_payload, socket}

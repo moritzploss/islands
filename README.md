@@ -6,7 +6,19 @@ This repo contains an implementation of *Islands*, a classic boardgame similar t
 
 The game logic is contained in the `islands_engine` directory; the `Phoenix` app 
 can be found inside `islands_interface`. Follow the steps below to get the
-project up and running. 
+project up and running.
+
+## Play the Game
+
+Follow the `Getting Started` guide below and start the `Phoenix` server. Then
+go to `localhost:4000` and open your browser's console. You can see the
+output of a complete game that was automatically played on page load.
+
+Since the focus of this project was on learning `Elixir` and `Phoenix`, I didn't
+bother to implement a visual representation of the game in `JavaScript`. However,
+all functions and event listeners that are required to play the game have
+been implemented; you can import them from here:
+[`islands_interface/assets/js/socket.js`](islands_interface/assets/js/socket.js)
 
 ## Getting Started
 

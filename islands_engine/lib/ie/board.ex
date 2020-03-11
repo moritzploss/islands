@@ -68,4 +68,10 @@ defmodule IE.Board do
       |> check_all_islands(coordinate)
       |> guess_response(board)
   end
+
+  def serialize(%{} = board) do
+    Enum.reduce(Map.keys(board), %{}, fn key, acc ->
+      Map.put(acc, key, IE.Island.serialize(board[key]))
+    end)
+  end
 end
